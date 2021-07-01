@@ -221,3 +221,5 @@ var gameControl = {
         game.tick()
     }
 }
+
+console.log('Hi')
