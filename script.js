@@ -3,7 +3,21 @@ var game = {
     score: 0,
     timer: null,
     tickLength: 500,
+    board: null,
     board: [
+        "###############",
+        "#             #",
+        "#             #",
+        "#      ##     #",
+        "#      ##     #",
+        "#             #",
+        "#             #",
+        "#             #",
+        "#             #",
+        "#             #",
+        "###############",
+    ],
+    board_d0: [
         "###############",
         "#             #",
         "#             #",
@@ -64,6 +78,7 @@ var game = {
         var result = snake.move()
         if (result == "gameover") {
             alert("Игра окончена! Очки: " + game.score)
+            gameControl.newGame()
             return
         }
         graphics.drawGame();
@@ -147,11 +162,7 @@ var snake = {
         if (game.isFruit(location)) {
             snake.parts.unshift(location)
             game.score++
-            txt = graphics.scoreField.textContent
-            txt = txt.split(' ')
-            txt[1] = ' ' + game.score
-            graphics.scoreField.textContent = txt.join('')
-
+            graphics.scoreField.innerText = game.score
             if (game.score == 10) {
                 game.board = game.board_d1
                 game.tickLength = 400
@@ -169,7 +180,6 @@ var graphics = {
     btn: document.getElementById('btn'),
     scoreField: document.getElementById('score'),
     squareSize: 30,
-    difficulty: 0,
     drawBoard: function (ctx) {
         var currentYoffset = 0
         ctx.clearRect(0, 0, graphics.canvas.width, graphics.canvas.height)
@@ -204,6 +214,7 @@ var graphics = {
     }
 }
 
+
 var gameControl = {
     difficulty: 0,
     processInput: function (keyPressed) {
@@ -218,9 +229,28 @@ var gameControl = {
     },
     startGame: function () {
         window.addEventListener("keypress", gameControl.processInput, false)
+        snake.parts = [{
+        x: 4,
+        y: 5
+    }, // голова
+    {
+        x: 3,
+        y: 5
+    },
+    {
+        x: 2,
+        y: 5
+    },
+]
+        snake.facing = 'E'
+        game.tickNumber = 0
+        game.score = 0
+        graphics.scoreField.innerText = game.score
+        game.tickLength = 500
+        game.board = game.board_d0
         game.tick()
+    },
+    newGame: function() {
+        gameControl.startGame()
     }
 }
-
-
-console.log('Hi')
