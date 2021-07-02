@@ -214,9 +214,8 @@ var graphics = {
     }
 }
 
-
+// 
 var gameControl = {
-    difficulty: 0,
     processInput: function (keyPressed) {
         var key = keyPressed.key.toLowerCase()
         var targetDirection = snake.facing
