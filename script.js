@@ -226,6 +226,7 @@ var graphics = {
     canvas: document.getElementById('canvas'),
     scoreField: document.getElementById('score'),
     levelField: document.getElementById('level'),
+    buttonsField: document.getElementById('buttons'),
     squareSize: 30,
     drawBoard: function (ctx) {
         var currentYoffset = 0
@@ -291,10 +292,19 @@ var gameControl = {
     processInput: function (keyPressed) {
         var key = keyPressed.key.toLowerCase()
         var targetDirection = snake.facing
-        if (key == "w" || key == "ц") targetDirection = "N"
-        if (key == "a" || key == "ф") targetDirection = "W"
-        if (key == "s" || key == "ы") targetDirection = "S"
-        if (key == "d" || key == "в") targetDirection = "E"
+        if (key == "w" || key == "ц" || keyPressed.innerText == 'Вверх') targetDirection = "N"
+        if (key == "a" || key == "ф" || keyPressed.innerText == 'Вправо') targetDirection = "W"
+        if (key == "s" || key == "ы" || keyPressed.innerText == 'Вниз') targetDirection = "S"
+        if (key == "d" || key == "в" || keyPressed.innerText == 'Влево') targetDirection = "E"
+        snake.facing = targetDirection
+        game.tick()
+    },
+    processBtnInput: function (keyPressed) {
+        var targetDirection = snake.facing
+        if (keyPressed.innerText == 'Вверх') targetDirection = "N"
+        if (keyPressed.innerText == 'Влево') targetDirection = "W"
+        if (keyPressed.innerText == 'Вниз') targetDirection = "S"
+        if (keyPressed.innerText == 'Вправо') targetDirection = "E"
         snake.facing = targetDirection
         game.tick()
     },
