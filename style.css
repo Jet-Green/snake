@@ -4,16 +4,26 @@ body {
     align-items: center;
     height: 100vh;
     flex-direction: column;
+    font-family: 'Tourney', cursive;
+    font-size: 16px;
 }
 canvas {
     margin-top: 50px;
 }
 button {
-    font-size: 16px;
     height: 30px;
     width: 100px;
 }
 .menu>* {
     margin-top: 30px;
     font-size: 23px;
+}
+form {
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 4px 10px 4px 10px;
+
+    font-size: 19px;
+
+    cursor: pointer;
 }

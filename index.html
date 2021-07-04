@@ -6,16 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tourney:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
     <title>Змейка</title>
 </head>
 
 <body>
-    <button onclick="gameControl.startGame()">Start game</button>
+    <form onclick="gameControl.startGame()">Начать игру</form>
     <br>
-    <button onclick="gameControl.newGame()">New game</button>
-    <canvas id="canvas"></canvas> <br/>
+    <form onclick="gameControl.newGame()">Новая игра</form>
+
+    <canvas id="canvas"></canvas><br/>
     <div class="menu">
         <div>Очки: <span id="score">0</span></div>
+        <div>Уровень: <span id="level">1</span></div>
     </div>
 </body>
 <script src="script.js"></script>

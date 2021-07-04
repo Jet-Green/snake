@@ -71,13 +71,18 @@ var game = {
     ],
     fruit: [{
             x: 1,
-            y: 1
+            y: 1,
+            isSuperFruit: false,
+            color: 'red'
         },
         {
             x: 8,
-            y: 8
+            y: 8,
+            isSuperFruit: false,
+            color: 'red'
         },
     ],
+    fruitsCount: 0,
     tick: function () {
         window.clearTimeout(game.timer)
         game.tickNumber++;
@@ -98,12 +103,24 @@ var game = {
         var randomX = Math.floor(Math.random() * game.board[randomY].length) + 0
         var randomLocation = {
             x: randomX,
-            y: randomY
+            y: randomY,
+            isSuperFruit: false,
+            color: 'red'
+        }
+        let randomSuperLocation = {
+            x: randomX,
+            y: randomY,
+            isSuperFruit: true,
+            color: 'yellow'
         }
         if (game.isEmpty(randomLocation) && !game.isFruit(randomLocation)) {
-            game.fruit.push(randomLocation)
+            if (game.fruitsCount % 4 == 0) {
+                game.fruit.push(randomSuperLocation)
+            } else {
+                game.fruit.push(randomLocation)
+            }
+            game.fruitsCount++
         }
-
     },
     isEmpty: function (location) {
         return game.board[location.y][location.x] == ' '
@@ -115,7 +132,11 @@ var game = {
         for (var fruitNumber = 0; fruitNumber < game.fruit.length; fruitNumber++) {
             var fruit = game.fruit[fruitNumber]
             if (location.x == fruit.x && location.y == fruit.y) {
-                game.fruit.splice(fruitNumber, 1)
+                if (fruit.isSuperFruit) {
+                    // Some magic with snake
+                    console.log('Gotcha')
+                }
+                game.fruit.splice(fruitNumber, 1)                
                 return true;
             }
         }
@@ -179,14 +200,16 @@ var snake = {
             snake.parts.unshift(location)
             game.score++
             graphics.scoreField.innerText = game.score
-            if (game.score == 10) {
+            if (game.score == 15) {
                 game.board = game.board_d1
-                game.tickLength = 400
+                game.tickLength = 350
+                graphics.levelField.innerText = 2
             }
-            if(game.score == 20) {
+            if (game.score == 27) {
                 game.board = game.board_d2
-                game.tickLength = 305
-            } 
+                game.tickLength = 280
+                graphics.levelField.innerText = 3
+            }
         }
     }
 }
@@ -202,6 +225,7 @@ var snake = {
 var graphics = {
     canvas: document.getElementById('canvas'),
     scoreField: document.getElementById('score'),
+    levelField: document.getElementById('level'),
     squareSize: 30,
     drawBoard: function (ctx) {
         var currentYoffset = 0
@@ -220,20 +244,24 @@ var graphics = {
         });
     },
     draw: function (ctx, source, color) {
-        if (source == snake.parts) {
+        if (source == game.fruit) {
             source.forEach(function drawPart(part) {
+                var partXlocation = part.x * graphics.squareSize;
+                var partYlocation = part.y * graphics.squareSize;
+                ctx.fillStyle = part.color
+                ctx.fillRect(partXlocation, partYlocation, graphics.squareSize, graphics.squareSize)
+            })
+        } else if (source == snake.parts) {
+            source.forEach(function drawPart(part) {
+                var partXlocation = part.x * graphics.squareSize;
+                var partYlocation = part.y * graphics.squareSize;
                 if (source.indexOf(part) == 0) {
                     ctx.fillStyle = 'black'
-                    var partXlocation = part.x * graphics.squareSize;
-                    var partYlocation = part.y * graphics.squareSize;
                     ctx.fillRect(partXlocation, partYlocation, graphics.squareSize, graphics.squareSize)
                 } else {
                     ctx.fillStyle = color
-                    var partXlocation = part.x * graphics.squareSize;
-                    var partYlocation = part.y * graphics.squareSize;
                     ctx.fillRect(partXlocation, partYlocation, graphics.squareSize, graphics.squareSize)
                 }
-                
             })
         } else {
             source.forEach(function drawPart(part) {
@@ -249,7 +277,7 @@ var graphics = {
         graphics.canvas.height = game.board.length * graphics.squareSize
         var ctx = graphics.canvas.getContext('2d')
         graphics.drawBoard(ctx, 0)
-        graphics.draw(ctx, game.fruit, "red")
+        graphics.draw(ctx, game.fruit, '')
         graphics.draw(ctx, snake.parts, "green")
     }
 }
@@ -272,7 +300,7 @@ var gameControl = {
     },
     startGame: function () {
         window.addEventListener("keypress", gameControl.processInput, false)
-        game.tick()
+        graphics.drawGame()
     },
     newGame: function() {
         window.location.reload()
