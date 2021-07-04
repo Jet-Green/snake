@@ -1,9 +1,18 @@
+/**
+ * board
+ * fruit
+ * tick: function ()
+ * addRandomFruit: function ()
+ * isEmpty: function (location)
+ * isWall: function (location)
+ * isFruit: function (location)
+ * isSnake: function (location)
+ */
 var game = {
     tickNumber: 0,
     score: 0,
     timer: null,
     tickLength: 500,
-    board: null,
     board: [
         "###############",
         "#             #",
@@ -46,19 +55,19 @@ var game = {
         "#################",
     ],
     board_d2: [
-        "###################",
-        "#           #     #",
-        "#                 #",
-        "#                 #",
-        "#                 #",
-        "#      ###        #",
-        "#      ###      ###",
-        "#      ###      #",
-        "#               #",
-        "#               #",
-        "#   ###         #",
-        "#               #",
-        "#################",
+        "####################",
+        "#           #      #",
+        "#           #      #",
+        "#                  #",
+        "#                  #",
+        "#      ###         #",
+        "#      ###       ###",
+        "#      ###       #",
+        "#                #",
+        "#                #",
+        "#   ###          #",
+        "#                #",
+        "##################",
     ],
     fruit: [{
             x: 1,
@@ -122,6 +131,13 @@ var game = {
         return false
     }
 }
+
+/**
+ * parts
+ * facing
+ * nextLocation: function ()
+ * move: function ()
+ */
 var snake = {
     parts: [{
             x: 4,
@@ -138,9 +154,9 @@ var snake = {
     ],
     facing: "E",
     nextLocation: function () {
-        var snakHead = snake.parts[0];
-        var targetX = snakHead.x;
-        var targetY = snakHead.y;
+        var snakeHead = snake.parts[0];
+        var targetX = snakeHead.x;
+        var targetY = snakeHead.y;
         targetY = snake.facing == "N" ? targetY - 1 : targetY
         targetY = snake.facing == "S" ? targetY + 1 : targetY
         targetX = snake.facing == "W" ? targetX - 1 : targetX
@@ -175,9 +191,16 @@ var snake = {
     }
 }
 
+/**
+ * canvas
+ * scoreField
+ * squareSize
+ * drawBoard: function (ctx)
+ * draw: function (ctx, source, color)
+ * drawGame: function ()
+ */
 var graphics = {
     canvas: document.getElementById('canvas'),
-    btn: document.getElementById('btn'),
     scoreField: document.getElementById('score'),
     squareSize: 30,
     drawBoard: function (ctx) {
@@ -197,12 +220,29 @@ var graphics = {
         });
     },
     draw: function (ctx, source, color) {
-        source.forEach(function drawPart(part) {
-            ctx.fillStyle = color
-            var partXlocation = part.x * graphics.squareSize;
-            var partYlocation = part.y * graphics.squareSize;
-            ctx.fillRect(partXlocation, partYlocation, graphics.squareSize, graphics.squareSize)
-        })
+        if (source == snake.parts) {
+            source.forEach(function drawPart(part) {
+                if (source.indexOf(part) == 0) {
+                    ctx.fillStyle = 'black'
+                    var partXlocation = part.x * graphics.squareSize;
+                    var partYlocation = part.y * graphics.squareSize;
+                    ctx.fillRect(partXlocation, partYlocation, graphics.squareSize, graphics.squareSize)
+                } else {
+                    ctx.fillStyle = color
+                    var partXlocation = part.x * graphics.squareSize;
+                    var partYlocation = part.y * graphics.squareSize;
+                    ctx.fillRect(partXlocation, partYlocation, graphics.squareSize, graphics.squareSize)
+                }
+                
+            })
+        } else {
+            source.forEach(function drawPart(part) {
+                ctx.fillStyle = color
+                var partXlocation = part.x * graphics.squareSize;
+                var partYlocation = part.y * graphics.squareSize;
+                ctx.fillRect(partXlocation, partYlocation, graphics.squareSize, graphics.squareSize)
+            })
+        }
     },
     drawGame: function () {
         graphics.canvas.width = game.board[0].length * graphics.squareSize
@@ -214,6 +254,11 @@ var graphics = {
     }
 }
 
+/** 
+ *  processInput: function (keyPressed)
+ *  startGame: function ()
+ *  newGame: function()
+ */
 var gameControl = {
     processInput: function (keyPressed) {
         var key = keyPressed.key.toLowerCase()
@@ -227,28 +272,9 @@ var gameControl = {
     },
     startGame: function () {
         window.addEventListener("keypress", gameControl.processInput, false)
-        snake.parts = [{
-            x: 4,
-            y: 5
-        }, // голова
-        {
-            x: 3,
-            y: 5
-        },
-        {
-            x: 2,
-            y: 5
-        },
-    ]
-        snake.facing = 'E'
-        game.tickNumber = 0
-        game.score = 0
-        graphics.scoreField.innerText = game.score
-        game.tickLength = 500
-        game.board = game.board_d0
         game.tick()
     },
     newGame: function() {
-        gameControl.startGame()
+        window.location.reload()
     }
 }
