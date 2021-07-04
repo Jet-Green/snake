@@ -214,33 +214,32 @@ var graphics = {
     }
 }
 
-// 
 var gameControl = {
     processInput: function (keyPressed) {
         var key = keyPressed.key.toLowerCase()
         var targetDirection = snake.facing
-        if (key == "w") targetDirection = "N"
-        if (key == "a") targetDirection = "W"
-        if (key == "s") targetDirection = "S"
-        if (key == "d") targetDirection = "E"
+        if (key == "w" || key == "ц") targetDirection = "N"
+        if (key == "a" || key == "ф") targetDirection = "W"
+        if (key == "s" || key == "ы") targetDirection = "S"
+        if (key == "d" || key == "в") targetDirection = "E"
         snake.facing = targetDirection
         game.tick()
     },
     startGame: function () {
         window.addEventListener("keypress", gameControl.processInput, false)
         snake.parts = [{
-        x: 4,
-        y: 5
-    }, // голова
-    {
-        x: 3,
-        y: 5
-    },
-    {
-        x: 2,
-        y: 5
-    },
-]
+            x: 4,
+            y: 5
+        }, // голова
+        {
+            x: 3,
+            y: 5
+        },
+        {
+            x: 2,
+            y: 5
+        },
+    ]
         snake.facing = 'E'
         game.tickNumber = 0
         game.score = 0
