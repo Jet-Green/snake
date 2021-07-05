@@ -13,6 +13,14 @@ canvas {
 button {
     height: 30px;
     width: 100px;
+
+    font-family: 'Tourney', cursive;
+    font-size: 16px;
+
+    background: white;
+
+    border: 1px solid black;
+    border-radius: 3px;
 }
 .menu>* {
     margin-top: 30px;
@@ -26,4 +34,11 @@ form {
     font-size: 19px;
 
     cursor: pointer;
+}
+#top {
+    margin-left: 105px;
+    margin-bottom: 6px;
+}
+#middle {
+    margin: 0 5px 0 5px;
 }
